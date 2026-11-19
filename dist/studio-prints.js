@@ -5,7 +5,7 @@ export function installPrints(start){
   const select=key=>{
     const button=buttons.find(b=>b.dataset.print===key)||buttons[0];
     const label=button.textContent.trim();
-    image.alt='Aquila 机械白头海雕，'+label+'，Blender Cycles 渲染';
+    image.alt='Nexus-Aquila NW-01 机械白头海雕，'+label+'，Blender Cycles 渲染';
     image.src=button.dataset.file;
     prints.querySelector('figcaption').textContent=label;
     for(const b of buttons)b.setAttribute('aria-pressed',String(b===button));

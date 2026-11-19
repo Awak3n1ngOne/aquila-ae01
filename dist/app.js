@@ -237,7 +237,7 @@ $('#exportGLB').onclick=async()=>{
   const button=$('#exportGLB');button.disabled=true;
   try{
     const blob=await model.download(),url=URL.createObjectURL(blob),link=document.createElement('a');
-    link.href=url;link.download='Aquila-Landing.glb';document.body.append(link);link.click();link.remove();
+    link.href=url;link.download='Nexus-Aquila-NW-01.glb';document.body.append(link);link.click();link.remove();
     setTimeout(()=>URL.revokeObjectURL(url),30000);
   }finally{button.disabled=false}
 };
