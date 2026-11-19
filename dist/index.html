@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Aquila AE–01 · 机械白头海雕</title>
+<meta name="description" content="机械海雕在空中振翅两次，再收翅着陆。可旋转视角观察羽翼传动和双腿缓冲。">
+<meta name="aquila-studio" content="./assets/studio-radiance.png">
+<link rel="preload" as="fetch" href="./assets/aquila-metal.glb.gz" type="application/gzip" crossorigin media="not all" id="modelHint">
+<script>if(!location.hash.startsWith('#studio'))document.getElementById('modelHint')?.setAttribute('media','all');</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="bench" id="bench">
+  <header class="identity">
+    <button id="help" type="button" title="操作与视图" aria-label="Aquila AE–01 操作与视图"><span class="signal"></span><span class="wordmark"><strong>AQUILA AE–01</strong><small>MECHANICAL EAGLE</small></span></button>
+  </header>
+  <fieldset class="pose-picker" aria-label="展示姿态">
+    <legend>展示姿态</legend>
+    <label><input type="radio" name="pose" value="front" checked>正面着陆</label>
+    <label><input type="radio" name="pose" value="side">侧向滑翔</label>
+    <label><input type="radio" name="pose" value="perched">收翼站立</label>
+    <label><input type="radio" name="pose" value="rear">背面展翅</label>
+  </fieldset>
+  <nav class="orbit-picker" aria-label="环绕当前姿态的观察方向">
+    <span>镜头</span>
+    <button type="button" data-view="axial" aria-label="正面观察" title="正面观察">正</button>
+    <button type="button" data-view="side" aria-label="左侧观察" title="左侧观察">左</button>
+    <button type="button" data-view="rightview" aria-label="右侧观察" title="右侧观察">右</button>
+    <button type="button" data-view="back" aria-label="背面观察" title="背面观察">背</button>
+    <button type="button" data-view="top" aria-label="俯视观察" title="俯视观察">俯</button>
+    <button type="button" data-view="bottom" aria-label="仰视观察" title="仰视观察">仰</button>
+    <button id="openPrints" type="button" aria-haspopup="dialog" title="查看 Blender 摄影棚渲染图">摄影棚</button>
+  </nav>
+  <section id="viewport" aria-label="三维机械白头海雕">
+    <svg class="drafting" viewBox="0 0 1672 941" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <radialGradient id="penumbra"><stop stop-color="#6c503a" stop-opacity=".40"/><stop offset=".49" stop-color="#967a62" stop-opacity=".22"/><stop offset="1" stop-color="#a48a73" stop-opacity="0"/></radialGradient>
+        <radialGradient id="contact"><stop stop-color="#49382d" stop-opacity=".44"/><stop offset=".48" stop-color="#6c5342" stop-opacity=".22"/><stop offset="1" stop-color="#856a56" stop-opacity="0"/></radialGradient>
+      </defs>
+      <g fill="none" stroke="#9a8671" stroke-width=".72">
+        <ellipse cx="835" cy="448" rx="527" ry="405" opacity=".57"/>
+        <ellipse cx="835" cy="448" rx="419" ry="323" stroke-dasharray="7 7" opacity=".57"/>
+        <path d="M835 20V195 M835 759V869 M273 448H412 M1258 448H1415" opacity=".65"/>
+      </g>
+      <g id="ground" aria-hidden="true">
+        <ellipse cx="839" cy="838" rx="611" ry="27" fill="url(#penumbra)"/>
+        <ellipse cx="830" cy="848" rx="326" ry="15" fill="url(#contact)"/>
+        <ellipse cx="1071" cy="827" rx="223" ry="11" fill="url(#contact)" opacity=".67"/>
+        <ellipse cx="536" cy="825" rx="220" ry="13" fill="url(#penumbra)"/>
+      </g>
+    </svg>
+    <canvas id="scene" tabindex="0" aria-label="可拖动旋转的三维机械白头海雕，使用方向键旋转，加减号缩放，Home 复位">正面着陆可播放机械鹰低空振翅两次、收翅降落并站稳的全过程。拖动进度可逐段查看。</canvas>
+    <svg id="annotation" aria-hidden="true"><path id="leader"/><circle id="pin"/><text id="caption">SHOULDER DRIVE</text></svg>
+    <div id="loading" role="status">正在装配机械海雕…</div>
+  </section>
+  <aside class="panel drive" aria-label="翼驱动和动作">
+    <button id="driveToggle" class="drive-toggle" type="button" aria-controls="driveControls" aria-expanded="false" title="展开动作控制">
+      <span class="panel-title">WING DRIVE</span>
+      <svg class="graph" viewBox="0 0 156 104" role="img" aria-label="翼驱动行程曲线"><path class="axis" d="M8 4V97 M0 87H154 M6 44H10"/><path id="strokeCurve"/></svg>
+      <span class="disclosure" aria-hidden="true">ACTUATION <span>↗</span></span>
+    </button>
+    <div id="driveControls" hidden>
+      <div class="actions"><button id="spread" type="button">收翼</button><button id="turn" type="button">转头</button><button id="blink" type="button">眨眼</button></div>
+      <button id="motion" type="button">动作演示</button><button id="inspectMore" type="button">视图与剖视 ↗</button>
+      <output id="poseReadout"></output>
+    </div>
+  </aside>
+  <aside class="panel systems" aria-label="总成目录">
+    <h2 class="panel-title">ASSEMBLIES</h2>
+    <div class="assembly-list" id="assemblies">
+      <button type="button" data-part="0" aria-pressed="false" title="头颈与光学"><i class="icon optics"></i>OPTICS</button>
+      <button type="button" data-part="4" aria-pressed="true" title="翼根传动"><i class="icon wing"></i>WING ROOT</button>
+      <button type="button" data-part="5" aria-pressed="false" title="尾扇"><i class="icon tail"></i>TAIL</button>
+      <button type="button" data-part="6" aria-pressed="false" title="双爪"><i class="icon talons"></i>TALONS</button>
+    </div>
+  </aside>
+  <section class="transport" aria-label="收翅着陆时间轴">
+    <div class="transport-buttons">
+      <button type="button" id="play" aria-label="播放着陆动画" title="播放着陆动画"><i class="play-icon"></i></button>
+      <button type="button" id="pause" aria-label="暂停动画" title="暂停动画"><i class="pause-icon"></i></button>
+      <button type="button" id="stop" aria-label="回到着陆起点" title="回到着陆起点"><i class="stop-icon"></i></button>
+    </div>
+    <label for="position">振翅着陆 <span id="flightPhase">第一次振翅</span></label>
+    <div class="scrubber">
+      <div class="stops" aria-hidden="true"></div>
+      <input type="range" id="position" aria-label="振翅着陆进度" min="0" max="1000" value="0" step="1" aria-valuetext="第一次振翅，0 秒">
+    </div>
+  </section>
+</main>
+<dialog id="inspection" aria-labelledby="inspectTitle">
+  <header><h2 id="inspectTitle">总成检视</h2><button id="close" type="button" aria-label="关闭检视">×</button></header>
+  <p id="selectionText"></p><div class="all-parts" aria-label="全部总成"></div>
+  <h3>视图</h3><div class="options"><button data-view="hero">参考视角</button><button data-view="side">侧视</button><button data-view="back">背视</button><button data-view="detail">总成特写</button><button id="xray" aria-pressed="false">透明剖视</button></div>
+  <p class="hint">在「正面着陆」里，按空格播放或暂停着陆，拖动进度可细看鹰爪触地。拖动模型旋转，滚轮缩放。点 WING DRIVE 操作展翅、转头与眨眼。</p>
+  <footer class="asset-footer"><output id="partCount"></output><button type="button" id="exportGLB">下载 3D 模型 · GLB</button></footer>
+</dialog>
+<dialog id="prints" closedby="any" aria-labelledby="printTitle">
+  <header><div><h2 id="printTitle">摄影棚渲染</h2><p>BLENDER CYCLES · 2048 × 1280</p></div>
+    <form method="dialog"><button type="submit" aria-label="关闭渲染图">×</button></form>
+  </header>
+  <figure><img id="studioPrint" width="2048" height="1280" decoding="async" alt=""><figcaption id="printCaption" aria-live="polite"></figcaption></figure>
+  <div class="print-angles" role="group" aria-label="选择渲染角度">
+    <button type="button" data-print="front" data-file="./assets/prints/front.webp" aria-pressed="false">展翅</button>
+    <button type="button" data-print="axial" data-file="./assets/prints/axial.webp" aria-pressed="false">正视</button>
+    <button type="button" data-print="rear" data-file="./assets/prints/rear.webp" aria-pressed="false">背面</button>
+    <button type="button" data-print="side" data-file="./assets/prints/side.webp" aria-pressed="false">侧向滑翔</button>
+    <button type="button" data-print="perched" data-file="./assets/prints/perched.webp" aria-pressed="false">站立</button>
+    <button type="button" data-print="plumage" data-file="./assets/prints/plumage.webp" aria-pressed="false">头部羽纹</button>
+    <button type="button" data-print="detail" data-file="./assets/prints/detail.webp" aria-pressed="false">头肩特写</button>
+    <button type="button" data-print="left" data-file="./assets/prints/left.webp" aria-pressed="false">左侧</button>
+    <button type="button" data-print="right" data-file="./assets/prints/right.webp" aria-pressed="false">右侧</button>
+    <button type="button" data-print="overhead" data-file="./assets/prints/overhead.webp" aria-pressed="false">俯视</button>
+    <button type="button" data-print="ventral" data-file="./assets/prints/ventral.webp" aria-pressed="false">翼腹</button>
+  </div>
+</dialog>
+<script type="module" src="boot.js"></script>
+</body>
+</html>

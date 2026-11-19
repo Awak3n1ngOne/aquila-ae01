@@ -1,0 +1,24 @@
+[
+  {
+    "output": "dist/assets/aquila-metal.glb.gz",
+    "sha256": "7412261f9cc62cd9ef686db00a726258b83c8bd99683ae9d2e0e2560bb72393f",
+    "parts": [
+      "model/parts/web-model/00.part",
+      "model/parts/web-model/01.part",
+      "model/parts/web-model/02.part",
+      "model/parts/web-model/03.part",
+      "model/parts/web-model/04.part",
+      "model/parts/web-model/05.part"
+    ]
+  },
+  {
+    "output": "model/Aquila-Landing.blend",
+    "sha256": "45fb41e410531d3a03a913960ea47bc32ecd1c27ce0f9caace6bde34969416c9",
+    "parts": [
+      "model/parts/blender-scene/00.part",
+      "model/parts/blender-scene/01.part",
+      "model/parts/blender-scene/02.part",
+      "model/parts/blender-scene/03.part"
+    ]
+  }
+]
